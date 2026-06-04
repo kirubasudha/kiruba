@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kiriza Handmade Things</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --blush: #FADADD;
+    --rose: #F2A7B3;
+    --deep-rose: #D4728A;
+    --lavender: #E8D5F5;
+    --lavender-mid: #C9A8E0;
+    --cream: #FFF8F5;
+    --white: #FFFFFF;
+    --charcoal: #3D2B35;
+    --muted: #9A7885;
+    --gold: #D4A96A;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content:'';
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity:.4;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--rose); border-radius:99px; }
+
+  /* ══════════════════════════════════
+     NAV
+  ══════════════════════════════════ */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:1000;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 18px 6vw;
+    background: rgba(255,248,245,0.82);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(242,167,179,0.25);
+    transition: box-shadow .3s;
+  }
+  nav.scrolled { box-shadow: 0 4px 30px rgba(212,114,138,0.12); }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.45rem; font-weight:600; letter-spacing:.04em;
+    color: var(--deep-rose);
+    display:flex; align-items:center; gap:8px;
+    text-decoration:none;
+  }
+  .nav-logo span { color: var(--muted); font-weight:300; font-style:italic; font-size:1rem; }
+
+  .nav-links { display:flex; gap:32px; list-style:none; }
+  .nav-links a {
+    font-size:.85rem; font-weight:500; letter-spacing:.06em; text-transform:uppercase;
+    color: var(--charcoal); text-decoration:none; position:relative; padding-bottom:3px;
+  }
+  .nav-links a::after {
+    content:''; position:absolute; bottom:0; left:0; width:0; height:1.5px;
+    background: var(--deep-rose); transition: width .3s ease;
+  }
+  .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+  .nav-links a:hover { color: var(--deep-rose); }
+
+  .nav-cta {
+    background: var(--deep-rose); color:#fff; border:none; padding:10px 22px;
+    border-radius:99px; font-size:.82rem; font-weight:500; letter-spacing:.05em;
+    text-transform:uppercase; cursor:pointer; transition: all .3s;
+    text-decoration:none;
+  }
+  .nav-cta:hover { background: var(--charcoal); transform:translateY(-1px); box-shadow:0 6px 20px rgba(212,114,138,.35); }
+
+  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+  .hamburger span { width:24px; height:2px; background:var(--charcoal); transition:.3s; border-radius:2px; }
+
+  .mobile-menu {
+    display:none; position:fixed; top:70px; left:0; right:0; z-index:999;
+    background:rgba(255,248,245,0.97); backdrop-filter:blur(20px);
+    padding:24px; flex-direction:column; gap:20px;
+    border-bottom: 1px solid rgba(242,167,179,.2);
+  }
+  .mobile-menu.open { display:flex; }
+  .mobile-menu a {
+    font-size:1rem; font-weight:500; color:var(--charcoal); text-decoration:none;
+    padding:8px 0; border-bottom:1px solid rgba(242,167,179,.2);
+  }
+
+  /* ══════════════════════════════════
+     HERO
+  ══════════════════════════════════ */
+  .hero {
+    min-height:100vh; display:grid; grid-template-columns:1fr 1fr;
+    align-items:center; gap:0; padding-top:80px; overflow:hidden;
+    position:relative;
+  }
+
+  .hero-bg-blob {
+    position:absolute; pointer-events:none;
+    border-radius:50%; filter:blur(80px); opacity:.35;
+  }
+  .blob1 { width:500px; height:500px; background:var(--blush); top:-100px; left:-100px; animation: float 8s ease-in-out infinite; }
+  .blob2 { width:400px; height:400px; background:var(--lavender); bottom:-50px; right:-50px; animation: float 10s ease-in-out infinite reverse; }
+  .blob3 { width:250px; height:250px; background:var(--rose); opacity:.2; top:40%; left:40%; animation: float 7s ease-in-out infinite 2s; }
+
+  @keyframes float {
+    0%,100% { transform:translateY(0) scale(1); }
+    50% { transform:translateY(-25px) scale(1.04); }
+  }
+
+  .hero-content {
+    padding: 80px 6vw 80px 8vw; z-index:1; position:relative;
+  }
+
+  .hero-eyebrow {
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:.78rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--deep-rose); font-weight:500; margin-bottom:20px;
+    opacity:0; animation: fadeUp .8s ease forwards .2s;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content:''; display:block; width:28px; height:1px; background:var(--rose);
+  }
+
+  .hero-title {
+    font-family:'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 5.5vw, 5.2rem);
+    line-height:1.08; font-weight:600; margin-bottom:12px;
+    opacity:0; animation: fadeUp .8s ease forwards .4s;
+  }
+  .hero-title em { font-style:italic; color:var(--deep-rose); font-weight:300; }
+
+  .hero-heart {
+    font-size:clamp(2.5rem, 4vw, 4rem);
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+  @keyframes heartbeat {
+    0%,100%{ transform:scale(1); }
+    14%{ transform:scale(1.2); }
+    28%{ transform:scale(1); }
+    42%{ transform:scale(1.15); }
+    70%{ transform:scale(1); }
+  }
+
+  .hero-subtitle {
+    font-size:1.05rem; color:var(--muted); line-height:1.75; max-width:420px;
+    margin:18px 0 36px; font-weight:300;
+    opacity:0; animation: fadeUp .8s ease forwards .6s;
+  }
+
+  .hero-buttons {
+    display:flex; gap:16px; flex-wrap:wrap;
+    opacity:0; animation: fadeUp .8s ease forwards .8s;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--deep-rose), var(--rose));
+    color:#fff; border:none; padding:14px 32px; border-radius:99px;
+    font-size:.9rem; font-weight:500; letter-spacing:.04em; cursor:pointer;
+    transition:all .3s; text-decoration:none; display:inline-block;
+    box-shadow: 0 4px 20px rgba(212,114,138,.35);
+  }
+  .btn-primary:hover { transform:translateY(-3px); box-shadow:0 10px 30px rgba(212,114,138,.45); }
+
+  .btn-outline {
+    background:transparent; color:var(--charcoal); border:1.5px solid var(--rose);
+    padding:14px 32px; border-radius:99px; font-size:.9rem; font-weight:500;
+    letter-spacing:.04em; cursor:pointer; transition:all .3s; text-decoration:none; display:inline-block;
+  }
+  .btn-outline:hover { background:var(--blush); border-color:var(--deep-rose); transform:translateY(-3px); }
+
+  .hero-stats {
+    display:flex; gap:36px; margin-top:48px;
+    opacity:0; animation: fadeUp .8s ease forwards 1s;
+  }
+  .stat { text-align:center; }
+  .stat-num {
+    font-family:'Cormorant Garamond', serif; font-size:2rem; font-weight:600; color:var(--deep-rose);
+    display:block;
+  }
+  .stat-label { font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); }
+
+  .hero-visual {
+    position:relative; height:100vh; overflow:hidden;
+    opacity:0; animation: fadeIn 1.2s ease forwards .5s;
+  }
+  .hero-visual-inner {
+    position:absolute; inset:0;
+    background: linear-gradient(160deg, var(--blush) 0%, var(--lavender) 50%, var(--rose) 100%);
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  .hero-collage {
+    position:relative; width:340px; height:420px;
+  }
+  .hero-img-card {
+    position:absolute; border-radius:24px; overflow:hidden;
+    box-shadow: 0 20px 60px rgba(61,43,53,.15);
+    transition: transform .6s ease;
+  }
+  .hero-img-card:hover { transform:translateY(-8px) rotate(0deg) !important; }
+  .hero-img-card img { width:100%; height:100%; object-fit:cover; display:block; }
+  .card1 { width:200px; height:260px; top:20px; left:0; transform:rotate(-4deg); z-index:2; }
+  .card2 { width:170px; height:220px; top:80px; right:0; transform:rotate(5deg); z-index:3; }
+  .card3 { width:140px; height:170px; bottom:0; left:30px; transform:rotate(2deg); z-index:1; }
+
+  .hero-badge {
+    position:absolute; background:#fff; border-radius:20px; padding:12px 18px;
+    box-shadow:0 8px 30px rgba(61,43,53,.12); display:flex; align-items:center; gap:10px;
+    animation: float 5s ease-in-out infinite;
+  }
+  .badge-top { top:40px; right:-20px; z-index:10; }
+  .badge-bottom { bottom:60px; left:-30px; z-index:10; animation-delay:2s; }
+  .badge-icon { font-size:1.4rem; }
+  .badge-text { font-size:.72rem; font-weight:500; color:var(--charcoal); line-height:1.3; }
+  .badge-text strong { display:block; font-size:.85rem; color:var(--deep-rose); }
+
+  /* ══════════════════════════════════
+     SECTION COMMON
+  ══════════════════════════════════ */
+  section { position:relative; z-index:1; }
+
+  .section-header { text-align:center; margin-bottom:56px; }
+  .section-eyebrow {
+    display:inline-block; font-size:.75rem; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--deep-rose); font-weight:500; margin-bottom:14px;
+  }
+  .section-title {
+    font-family:'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem); font-weight:600; line-height:1.2;
+  }
+  .section-title em { font-style:italic; color:var(--deep-rose); font-weight:300; }
+  .section-line {
+    width:60px; height:2px; background:linear-gradient(90deg, var(--rose), var(--lavender-mid));
+    margin:18px auto 0; border-radius:99px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(30px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity:0; } to { opacity:1; }
+  }
+
+  .reveal {
+    opacity:0; transform:translateY(40px); transition: opacity .7s ease, transform .7s ease;
+  }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* ══════════════════════════════════
+     MARQUEE
+  ══════════════════════════════════ */
+  .marquee-wrap {
+    background: linear-gradient(135deg, var(--deep-rose), #B5536C);
+    padding:14px 0; overflow:hidden; position:relative; z-index:2;
+  }
+  .marquee-track {
+    display:flex; gap:48px; white-space:nowrap;
+    animation: marquee 22s linear infinite;
+  }
+  .marquee-track span {
+    font-size:.78rem; letter-spacing:.12em; text-transform:uppercase;
+    color:rgba(255,255,255,.9); font-weight:500; flex-shrink:0;
+  }
+  .marquee-track span.dot { color:rgba(255,255,255,.4); font-size:1.2rem; line-height:1; }
+  @keyframes marquee {
+    from { transform:translateX(0); }
+    to { transform:translateX(-50%); }
+  }
+
+  /* ══════════════════════════════════
+     PRODUCTS
+  ══════════════════════════════════ */
+  .products-section {
+    padding: 100px 6vw;
+    background: var(--cream);
+  }
+
+  .products-grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap:28px;
+  }
+
+  .product-card {
+    background:#fff; border-radius:24px; overflow:hidden;
+    box-shadow:0 4px 24px rgba(61,43,53,.07);
+    transition: all .4s cubic-bezier(.175,.885,.32,1.275);
+    position:relative;
+  }
+  .product-card:hover { transform:translateY(-10px); box-shadow:0 20px 50px rgba(212,114,138,.2); }
+
+  .product-img-wrap {
+    position:relative; height:230px; overflow:hidden;
+    background: linear-gradient(145deg, var(--blush), var(--lavender));
+  }
+  .product-img-wrap img { width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
+  .product-card:hover .product-img-wrap img { transform:scale(1.08); }
+
+  .stock-badge {
+    position:absolute; top:14px; right:14px; padding:5px 12px;
+    border-radius:99px; font-size:.7rem; font-weight:600; letter-spacing:.04em;
+    text-transform:uppercase; backdrop-filter:blur(10px);
+  }
+  .stock-badge.available {
+    background:rgba(255,255,255,.85); color:#3B8A5C;
+    border:1px solid rgba(59,138,92,.25);
+  }
+  .stock-badge.out {
+    background:rgba(255,255,255,.85); color:#C0392B;
+    border:1px solid rgba(192,57,43,.25);
+  }
+
+  .product-info { padding:22px 22px 24px; }
+  .product-category {
+    font-size:.68rem; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--lavender-mid); font-weight:500; margin-bottom:8px;
+  }
+  .product-name {
+    font-family:'Cormorant Garamond', serif; font-size:1.3rem; font-weight:600;
+    color:var(--charcoal); margin-bottom:10px; line-height:1.3;
+  }
+  .product-price-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .product-price { font-size:1.1rem; font-weight:600; color:var(--deep-rose); }
+  .product-stock { font-size:.75rem; color:var(--muted); }
+  .product-stock span { font-weight:600; color:var(--charcoal); }
+
+  .btn-order {
+    width:100%; padding:11px; background:var(--blush); color:var(--deep-rose);
+    border:1.5px solid var(--rose); border-radius:12px; font-size:.82rem; font-weight:600;
+    letter-spacing:.04em; text-transform:uppercase; cursor:pointer; transition:all .3s;
+  }
+  .btn-order:hover { background:var(--deep-rose); color:#fff; border-color:var(--deep-rose); transform:scale(1.02); }
+  .btn-order.disabled { opacity:.55; cursor:not-allowed; }
+  .btn-order.disabled:hover { background:var(--blush); color:var(--deep-rose); border-color:var(--rose); transform:none; }
+
+  /* ══════════════════════════════════
+     OFFERS
+  ══════════════════════════════════ */
+  .offers-section {
+    padding:100px 6vw;
+    background: linear-gradient(160deg, var(--lavender) 0%, var(--blush) 60%, var(--cream) 100%);
+    position:relative; overflow:hidden;
+  }
+  .offers-section::before {
+    content:''; position:absolute; inset:0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4728A' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events:none;
+  }
+
+  .offers-grid {
+    display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:24px;
+  }
+
+  .offer-card {
+    background:#fff; border-radius:24px; padding:36px 28px; text-align:center;
+    box-shadow:0 4px 24px rgba(61,43,53,.08); position:relative; overflow:hidden;
+    transition:all .4s ease;
+  }
+  .offer-card::before {
+    content:''; position:absolute; top:-60px; right:-60px; width:140px; height:140px;
+    border-radius:50%; opacity:.12; transition:transform .4s;
+  }
+  .offer-card:nth-child(1)::before { background:var(--deep-rose); }
+  .offer-card:nth-child(2)::before { background:var(--lavender-mid); }
+  .offer-card:nth-child(3)::before { background:var(--gold); }
+  .offer-card:nth-child(4)::before { background:var(--rose); }
+  .offer-card:hover { transform:translateY(-8px); box-shadow:0 20px 50px rgba(212,114,138,.18); }
+  .offer-card:hover::before { transform:scale(1.5); }
+
+  .offer-icon { font-size:2.4rem; margin-bottom:16px; display:block; }
+  .offer-tag {
+    display:inline-block; padding:5px 14px; border-radius:99px;
+    font-size:.7rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    background:var(--blush); color:var(--deep-rose); margin-bottom:16px;
+  }
+  .offer-title {
+    font-family:'Cormorant Garamond', serif; font-size:1.5rem; font-weight:600;
+    color:var(--charcoal); margin-bottom:10px;
+  }
+  .offer-desc { font-size:.88rem; color:var(--muted); line-height:1.65; }
+
+  /* ══════════════════════════════════
+     ABOUT
+  ══════════════════════════════════ */
+  .about-section {
+    padding:100px 6vw;
+    display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center;
+  }
+
+  .about-visual {
+    position:relative;
+  }
+  .about-img-main {
+    width:100%; height:460px; border-radius:32px; overflow:hidden;
+    box-shadow:0 20px 60px rgba(61,43,53,.12);
+  }
+  .about-img-main img { width:100%; height:100%; object-fit:cover; }
+  .about-img-accent {
+    position:absolute; width:170px; height:200px; border-radius:20px; overflow:hidden;
+    box-shadow:0 12px 40px rgba(61,43,53,.15); bottom:-30px; right:-30px;
+    border:5px solid #fff;
+  }
+  .about-img-accent img { width:100%; height:100%; object-fit:cover; }
+  .about-img-tag {
+    position:absolute; top:-20px; left:20px; background:#fff;
+    padding:12px 20px; border-radius:16px; box-shadow:0 8px 30px rgba(61,43,53,.1);
+    font-size:.78rem; font-weight:500; color:var(--charcoal);
+    display:flex; align-items:center; gap:8px;
+  }
+  .about-img-tag i { color:var(--deep-rose); }
+
+  .about-content .section-header { text-align:left; }
+  .about-content .section-line { margin:18px 0 0; }
+  .about-text {
+    font-size:1.02rem; color:var(--muted); line-height:1.85; margin-top:24px;
+    font-style:italic; font-family:'Cormorant Garamond', serif; font-size:1.2rem;
+    color:var(--charcoal); border-left:3px solid var(--rose); padding-left:20px;
+  }
+  .about-features {
+    display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:32px;
+  }
+  .about-feature {
+    display:flex; align-items:flex-start; gap:12px; padding:16px;
+    background:var(--blush); border-radius:16px;
+  }
+  .about-feature i { color:var(--deep-rose); margin-top:2px; font-size:1rem; }
+  .about-feature-text strong { display:block; font-size:.88rem; margin-bottom:3px; }
+  .about-feature-text span { font-size:.78rem; color:var(--muted); }
+
+  /* ══════════════════════════════════
+     SOCIAL CTA
+  ══════════════════════════════════ */
+  .social-cta {
+    padding:80px 6vw;
+    background: var(--charcoal);
+    display:grid; grid-template-columns:1fr 1fr; gap:32px;
+  }
+
+  .social-card {
+    border-radius:28px; padding:48px 40px; position:relative; overflow:hidden;
+    display:flex; flex-direction:column; align-items:flex-start; gap:18px;
+    transition:transform .3s;
+  }
+  .social-card:hover { transform:scale(1.02); }
+
+  .social-card.wa {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+  }
+  .social-card.ig {
+    background: linear-gradient(135deg, #F77737, #C13584, #833AB4, #405DE6);
+  }
+  .social-card-glow {
+    position:absolute; width:200px; height:200px; border-radius:50%;
+    background:rgba(255,255,255,.1); top:-50px; right:-50px; pointer-events:none;
+  }
+
+  .social-card-icon { font-size:3rem; color:#fff; }
+  .social-card h3 {
+    font-family:'Cormorant Garamond', serif; font-size:2rem;
+    color:#fff; font-weight:600;
+  }
+  .social-card p { color:rgba(255,255,255,.8); font-size:.95rem; line-height:1.6; }
+  .social-card-btn {
+    display:inline-flex; align-items:center; gap:8px;
+    background:#fff; padding:12px 26px; border-radius:99px;
+    font-size:.85rem; font-weight:600; text-decoration:none;
+    transition:all .3s; border:none; cursor:pointer; margin-top:8px;
+  }
+  .social-card.wa .social-card-btn { color:#128C7E; }
+  .social-card.ig .social-card-btn { color:#C13584; }
+  .social-card-btn:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,.2); }
+
+  /* ══════════════════════════════════
+     CONTACT
+  ══════════════════════════════════ */
+  .contact-section {
+    padding:100px 6vw;
+    background: var(--cream);
+    display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start;
+  }
+
+  .contact-info h2 {
+    font-family:'Cormorant Garamond', serif; font-size:2.6rem; font-weight:600;
+    margin-bottom:18px; line-height:1.2;
+  }
+  .contact-info p { color:var(--muted); line-height:1.75; margin-bottom:36px; font-size:.95rem; }
+  .contact-details { display:flex; flex-direction:column; gap:20px; }
+  .contact-item {
+    display:flex; align-items:center; gap:16px; padding:18px 22px;
+    background:#fff; border-radius:16px; box-shadow:0 2px 12px rgba(61,43,53,.06);
+    text-decoration:none; color:var(--charcoal); transition:all .3s;
+  }
+  .contact-item:hover { transform:translateX(6px); box-shadow:0 6px 24px rgba(212,114,138,.15); }
+  .contact-item-icon {
+    width:44px; height:44px; border-radius:12px; display:flex; align-items:center;
+    justify-content:center; font-size:1.1rem; flex-shrink:0;
+  }
+  .ci-wa { background:#E8F8F0; color:#25D366; }
+  .ci-ig { background:#FFF0F8; color:#C13584; }
+  .contact-item-text strong { display:block; font-size:.88rem; margin-bottom:2px; }
+  .contact-item-text span { font-size:.8rem; color:var(--muted); }
+
+  .contact-form-wrap {
+    background:#fff; border-radius:28px; padding:44px;
+    box-shadow:0 8px 40px rgba(61,43,53,.08);
+  }
+  .form-group { margin-bottom:20px; }
+  .form-group label { display:block; font-size:.78rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--charcoal); margin-bottom:8px; }
+  .form-group input, .form-group textarea {
+    width:100%; padding:13px 18px; border:1.5px solid rgba(242,167,179,.4); border-radius:12px;
+    font-size:.92rem; font-family:'DM Sans', sans-serif; color:var(--charcoal);
+    background:var(--cream); outline:none; transition:all .3s; resize:none;
+  }
+  .form-group input:focus, .form-group textarea:focus {
+    border-color:var(--deep-rose); background:#fff; box-shadow:0 0 0 4px rgba(212,114,138,.12);
+  }
+  .form-group textarea { height:120px; }
+  .form-submit {
+    width:100%; padding:14px; background:linear-gradient(135deg, var(--deep-rose), var(--rose));
+    color:#fff; border:none; border-radius:12px; font-size:.92rem; font-weight:600;
+    letter-spacing:.04em; cursor:pointer; transition:all .3s;
+  }
+  .form-submit:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(212,114,138,.4); }
+
+  /* ══════════════════════════════════
+     FOOTER
+  ══════════════════════════════════ */
+  footer {
+    background:var(--charcoal); color:rgba(255,255,255,.6);
+    padding:48px 6vw 32px; text-align:center;
+  }
+  .footer-logo {
+    font-family:'Cormorant Garamond', serif; font-size:1.8rem; font-weight:600;
+    color:#fff; display:block; margin-bottom:12px;
+  }
+  .footer-tagline { font-size:.85rem; margin-bottom:28px; }
+  .footer-links { display:flex; justify-content:center; gap:24px; margin-bottom:28px; }
+  .footer-links a {
+    color:rgba(255,255,255,.6); text-decoration:none; font-size:.82rem;
+    transition:color .3s; text-transform:uppercase; letter-spacing:.08em;
+  }
+  .footer-links a:hover { color:#fff; }
+  .footer-socials { display:flex; justify-content:center; gap:16px; margin-bottom:32px; }
+  .footer-social {
+    width:40px; height:40px; border-radius:50%; display:flex; align-items:center;
+    justify-content:center; text-decoration:none; transition:all .3s;
+    border:1px solid rgba(255,255,255,.15);
+  }
+  .footer-social:hover { transform:translateY(-3px); border-color:var(--rose); }
+  .footer-social i { color:rgba(255,255,255,.7); font-size:1rem; }
+  .footer-copy { font-size:.78rem; border-top:1px solid rgba(255,255,255,.08); padding-top:24px; }
+  .footer-copy span { color:var(--rose); }
+
+  /* ══════════════════════════════════
+     AI CHAT WIDGET
+  ══════════════════════════════════ */
+  .ai-chat-fab {
+    position:fixed; bottom:30px; right:30px; z-index:9999;
+    width:60px; height:60px; border-radius:50%;
+    background:linear-gradient(135deg, var(--deep-rose), var(--lavender-mid));
+    box-shadow:0 8px 30px rgba(212,114,138,.45); cursor:pointer; border:none;
+    display:flex; align-items:center; justify-content:center; font-size:1.4rem;
+    color:#fff; transition:all .3s; animation: fabPulse 3s ease-in-out infinite;
+  }
+  @keyframes fabPulse {
+    0%,100%{ box-shadow:0 8px 30px rgba(212,114,138,.45); }
+    50%{ box-shadow:0 8px 40px rgba(212,114,138,.7), 0 0 0 10px rgba(212,114,138,.1); }
+  }
+  .ai-chat-fab:hover { transform:scale(1.1) rotate(-5deg); }
+  .fab-badge {
+    position:absolute; top:-4px; right:-4px; width:18px; height:18px; border-radius:50%;
+    background:#25D366; border:2px solid #fff; font-size:.55rem; font-weight:700;
+    color:#fff; display:flex; align-items:center; justify-content:center;
+  }
+
+  .ai-chat-window {
+    position:fixed; bottom:102px; right:30px; z-index:9998;
+    width:340px; background:#fff; border-radius:24px;
+    box-shadow:0 20px 60px rgba(61,43,53,.18);
+    display:none; flex-direction:column; overflow:hidden;
+    animation: slideUp .3s ease;
+  }
+  .ai-chat-window.open { display:flex; }
+  @keyframes slideUp {
+    from { opacity:0; transform:translateY(20px) scale(.95); }
+    to { opacity:1; transform:translateY(0) scale(1); }
+  }
+
+  .chat-header {
+    background:linear-gradient(135deg, var(--deep-rose), var(--lavender-mid));
+    padding:18px 20px; display:flex; align-items:center; gap:12px;
+  }
+  .chat-avatar {
+    width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.2);
+    display:flex; align-items:center; justify-content:center; font-size:1.1rem; color:#fff;
+  }
+  .chat-header-info strong { color:#fff; font-size:.92rem; display:block; }
+  .chat-header-info span { color:rgba(255,255,255,.7); font-size:.72rem; }
+  .chat-close { margin-left:auto; background:none; border:none; color:#fff; font-size:1.1rem; cursor:pointer; opacity:.7; }
+  .chat-close:hover { opacity:1; }
+
+  .chat-messages {
+    flex:1; overflow-y:auto; padding:20px; max-height:280px;
+    display:flex; flex-direction:column; gap:12px;
+    background:var(--cream);
+  }
+
+  .chat-msg {
+    max-width:85%; padding:10px 14px; border-radius:16px; font-size:.83rem; line-height:1.5;
+    animation: fadeUp .3s ease;
+  }
+  .chat-msg.bot {
+    background:#fff; color:var(--charcoal); border-bottom-left-radius:4px;
+    box-shadow:0 2px 8px rgba(61,43,53,.08); align-self:flex-start;
+  }
+  .chat-msg.user {
+    background:linear-gradient(135deg, var(--deep-rose), var(--rose));
+    color:#fff; border-bottom-right-radius:4px; align-self:flex-end;
+  }
+
+  .chat-quick-btns {
+    display:flex; gap:8px; flex-wrap:wrap; padding:12px 20px 0;
+  }
+  .chat-quick-btn {
+    padding:6px 12px; background:var(--blush); border:1px solid var(--rose);
+    border-radius:99px; font-size:.72rem; color:var(--deep-rose); cursor:pointer;
+    transition:all .2s; font-family:'DM Sans', sans-serif; font-weight:500;
+  }
+  .chat-quick-btn:hover { background:var(--deep-rose); color:#fff; border-color:var(--deep-rose); }
+
+  .chat-input-row {
+    display:flex; gap:10px; padding:14px 16px; border-top:1px solid rgba(242,167,179,.2);
+  }
+  .chat-input {
+    flex:1; padding:9px 14px; border:1.5px solid rgba(242,167,179,.4); border-radius:99px;
+    font-size:.82rem; font-family:'DM Sans', sans-serif; outline:none;
+    background:var(--cream); color:var(--charcoal); transition:border .2s;
+  }
+  .chat-input:focus { border-color:var(--deep-rose); }
+  .chat-send {
+    width:36px; height:36px; border-radius:50%; background:var(--deep-rose); color:#fff;
+    border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    font-size:.9rem; transition:all .2s;
+  }
+  .chat-send:hover { background:var(--charcoal); transform:scale(1.1); }
+
+  /* ══════════════════════════════════
+     TOAST
+  ══════════════════════════════════ */
+  .toast {
+    position:fixed; bottom:110px; left:50%; transform:translateX(-50%);
+    background:var(--charcoal); color:#fff; padding:12px 24px; border-radius:99px;
+    font-size:.85rem; z-index:9999; opacity:0; pointer-events:none;
+    transition:opacity .3s;
+  }
+  .toast.show { opacity:1; }
+
+  /* ══════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════ */
+  @media (max-width:900px) {
+    .hero { grid-template-columns:1fr; min-height:auto; }
+    .hero-content { padding:100px 6vw 40px; }
+    .hero-visual { height:400px; }
+    .hero-collage { width:260px; height:320px; }
+    .card1 { width:150px; height:200px; }
+    .card2 { width:130px; height:170px; }
+    .card3 { width:110px; height:130px; }
+    .about-section { grid-template-columns:1fr; gap:48px; }
+    .about-img-main { height:300px; }
+    .social-cta { grid-template-columns:1fr; }
+    .contact-section { grid-template-columns:1fr; gap:48px; }
+    .nav-links, .nav-cta { display:none; }
+    .hamburger { display:flex; }
+  }
+
+  @media (max-width:600px) {
+    .hero-title { font-size:2.4rem; }
+    .hero-stats { gap:20px; }
+    .products-grid { grid-template-columns:1fr; }
+    .offers-grid { grid-template-columns:1fr; }
+    .about-features { grid-template-columns:1fr; }
+    .social-card { padding:32px 24px; }
+    .contact-form-wrap { padding:28px 22px; }
+    .ai-chat-window { width:calc(100vw - 40px); right:20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    Kiriza <span>Handmade Things</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#home" class="active">Home</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#offers">Offers</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://wa.me/919342853381" class="nav-cta" target="_blank">Order Now</a>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home">Home</a>
+  <a href="#products">Products</a>
+  <a href="#offers">Offers</a>
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-bg-blob blob1"></div>
+  <div class="hero-bg-blob blob2"></div>
+  <div class="hero-bg-blob blob3"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Handmade With Love</div>
+    <h1 class="hero-title">
+      Crafted <em>with</em><br>Heart &amp; Soul <span class="hero-heart">❤️</span>
+    </h1>
+    <p class="hero-subtitle">Custom-made handmade products for girls, babies, and gift lovers. Each piece is uniquely designed with passion and care.</p>
+    <div class="hero-buttons">
+      <a href="https://wa.me/919342853381" class="btn-primary" target="_blank">✨ Place Order</a>
+      <a href="#products" class="btn-outline">View Products</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">200+</span><span class="stat-label">Products</span></div>
+      <div class="stat"><span class="stat-num">500+</span><span class="stat-label">Happy Clients</span></div>
+      <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Handmade</span></div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-visual-inner">
+      <div class="hero-collage">
+        <div class="hero-img-card card1">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=500&fit=crop" alt="Handmade Bracelet">
+        </div>
+        <div class="hero-img-card card2">
+          <img src="https://images.unsplash.com/photo-1523779917675-b6ed3a42a561?w=350&h=450&fit=crop" alt="Hair Accessories">
+        </div>
+        <div class="hero-img-card card3">
+          <img src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=300&h=350&fit=crop" alt="Gift Items">
+        </div>
+        <div class="hero-badge badge-top">
+          <span class="badge-icon">🌸</span>
+          <div class="badge-text"><strong>Premium Quality</strong>Handcrafted</div>
+        </div>
+        <div class="hero-badge badge-bottom">
+          <span class="badge-icon">🎁</span>
+          <div class="badge-text"><strong>Custom Orders</strong>Available</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MARQUEE ── -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>Handmade Bracelets</span><span class="dot">✦</span>
+    <span>Custom Kerchiefs</span><span class="dot">✦</span>
+    <span>Designer Purses</span><span class="dot">✦</span>
+    <span>Hair Accessories</span><span class="dot">✦</span>
+    <span>Baby Frocks</span><span class="dot">✦</span>
+    <span>Girls Dresses</span><span class="dot">✦</span>
+    <span>Gift Items</span><span class="dot">✦</span>
+    <span>Made With Love ❤️</span><span class="dot">✦</span>
+    <!-- duplicate for loop -->
+    <span>Handmade Bracelets</span><span class="dot">✦</span>
+    <span>Custom Kerchiefs</span><span class="dot">✦</span>
+    <span>Designer Purses</span><span class="dot">✦</span>
+    <span>Hair Accessories</span><span class="dot">✦</span>
+    <span>Baby Frocks</span><span class="dot">✦</span>
+    <span>Girls Dresses</span><span class="dot">✦</span>
+    <span>Gift Items</span><span class="dot">✦</span>
+    <span>Made With Love ❤️</span><span class="dot">✦</span>
+  </div>
+</div>
+
+<!-- ── PRODUCTS ── -->
+<section class="products-section" id="products">
+  <div class="section-header reveal">
+    <span class="section-eyebrow">Our Collection</span>
+    <h2 class="section-title">Handcrafted with <em>Love</em></h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<!-- ── OFFERS ── -->
+<section class="offers-section" id="offers">
+  <div class="section-header reveal">
+    <span class="section-eyebrow">Special Deals</span>
+    <h2 class="section-title">Sweet <em>Offers</em></h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="offers-grid">
+    <div class="offer-card reveal">
+      <span class="offer-icon">🎁</span>
+      <span class="offer-tag">Limited Time</span>
+      <h3 class="offer-title">Buy 2 Get 1 Free</h3>
+      <p class="offer-desc">Pick any 2 products and get the 3rd one absolutely free! A perfect way to gift or treat yourself.</p>
+    </div>
+    <div class="offer-card reveal" style="transition-delay:.1s">
+      <span class="offer-icon">✨</span>
+      <span class="offer-tag">New Customers</span>
+      <h3 class="offer-title">10% First Order</h3>
+      <p class="offer-desc">Welcome to the Kiriza family! Enjoy 10% off your very first order with us. Use code KIRIZA10.</p>
+    </div>
+    <div class="offer-card reveal" style="transition-delay:.2s">
+      <span class="offer-icon">🌸</span>
+      <span class="offer-tag">Festival Season</span>
+      <h3 class="offer-title">Festival Specials</h3>
+      <p class="offer-desc">Exclusive festive collections for Diwali, Pongal, Christmas and more. Gift happiness, gift handmade.</p>
+    </div>
+    <div class="offer-card reveal" style="transition-delay:.3s">
+      <span class="offer-icon">💝</span>
+      <span class="offer-tag">Bulk Orders</span>
+      <h3 class="offer-title">Custom Bulk Deal</h3>
+      <p class="offer-desc">Order 10+ items and get special pricing. Perfect for weddings, baby showers and corporate gifts.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="about-section" id="about">
+  <div class="about-visual reveal">
+    <div class="about-img-main">
+      <img src="https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=600&h=700&fit=crop" alt="Handmade Crafts">
+    </div>
+    <div class="about-img-accent">
+      <img src="https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=300&h=350&fit=crop" alt="Handmade Details">
+    </div>
+    <div class="about-img-tag"><i class="fas fa-heart"></i> Est. 2020 — Coimbatore</div>
+  </div>
+  <div class="about-content reveal" style="transition-delay:.2s">
+    <div class="section-header">
+      <span class="section-eyebrow">Our Story</span>
+      <h2 class="section-title">Passion poured into <em>every stitch</em></h2>
+      <div class="section-line"></div>
+    </div>
+    <p class="about-text">"Kiriza Handmade Things specializes in beautifully handcrafted products made with care and creativity. Every item is designed with love to bring happiness and uniqueness to our customers."</p>
+    <div class="about-features">
+      <div class="about-feature">
+        <i class="fas fa-hand-sparkles"></i>
+        <div class="about-feature-text">
+          <strong>100% Handmade</strong>
+          <span>Every piece crafted by hand</span>
+        </div>
+      </div>
+      <div class="about-feature">
+        <i class="fas fa-paint-brush"></i>
+        <div class="about-feature-text">
+          <strong>Custom Designs</strong>
+          <span>Made just for you</span>
+        </div>
+      </div>
+      <div class="about-feature">
+        <i class="fas fa-gift"></i>
+        <div class="about-feature-text">
+          <strong>Gift Ready</strong>
+          <span>Beautiful packaging</span>
+        </div>
+      </div>
+      <div class="about-feature">
+        <i class="fas fa-star"></i>
+        <div class="about-feature-text">
+          <strong>Premium Quality</strong>
+          <span>Only the finest materials</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SOCIAL CTA ── -->
+<div class="social-cta">
+  <div class="social-card wa reveal">
+    <div class="social-card-glow"></div>
+    <div class="social-card-icon"><i class="fab fa-whatsapp"></i></div>
+    <h3>Chat on WhatsApp</h3>
+    <p>Ready to order or have questions? Reach us directly on WhatsApp for quick responses.</p>
+    <a href="https://wa.me/919342853381" class="social-card-btn" target="_blank">
+      <i class="fab fa-whatsapp"></i> +91 93428 53381
+    </a>
+  </div>
+  <div class="social-card ig reveal" style="transition-delay:.15s">
+    <div class="social-card-glow"></div>
+    <div class="social-card-icon"><i class="fab fa-instagram"></i></div>
+    <h3>Follow on Instagram</h3>
+    <p>See our latest creations, behind-the-scenes, and customer stories on Instagram.</p>
+    <a href="https://instagram.com/kiriza_handmade" class="social-card-btn" target="_blank">
+      <i class="fab fa-instagram"></i> @kiriza_handmade
+    </a>
+  </div>
+</div>
+
+<!-- ── CONTACT ── -->
+<section class="contact-section" id="contact">
+  <div class="contact-info reveal">
+    <h2>Let's Create Something <em style="color:var(--deep-rose);font-style:italic;">Beautiful</em></h2>
+    <p>Have a custom order in mind? Want to know more about our products? We'd love to hear from you!</p>
+    <div class="contact-details">
+      <a href="https://wa.me/919342853381" class="contact-item" target="_blank">
+        <div class="contact-item-icon ci-wa"><i class="fab fa-whatsapp"></i></div>
+        <div class="contact-item-text">
+          <strong>WhatsApp Us</strong>
+          <span>+91 93428 53381</span>
+        </div>
+      </a>
+      <a href="https://instagram.com/kiriza_handmade" class="contact-item" target="_blank">
+        <div class="contact-item-icon ci-ig"><i class="fab fa-instagram"></i></div>
+        <div class="contact-item-text">
+          <strong>Instagram DM</strong>
+          <span>@kiriza_handmade</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="contact-form-wrap reveal" style="transition-delay:.2s">
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;margin-bottom:24px;color:var(--charcoal);">Send a Message</h3>
+    <div class="form-group">
+      <label>Your Name</label>
+      <input type="text" id="formName" placeholder="e.g. Priya Sharma">
+    </div>
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input type="tel" id="formPhone" placeholder="+91 XXXXX XXXXX">
+    </div>
+    <div class="form-group">
+      <label>Message</label>
+      <textarea id="formMsg" placeholder="Tell us about your order or any questions..."></textarea>
+    </div>
+    <button class="form-submit" onclick="submitForm()">Send Message ✨</button>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <span class="footer-logo">Kiriza Handmade Things</span>
+  <p class="footer-tagline">Handmade With Love ❤️ — Coimbatore, Tamil Nadu</p>
+  <div class="footer-links">
+    <a href="#home">Home</a>
+    <a href="#products">Products</a>
+    <a href="#offers">Offers</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="footer-socials">
+    <a href="https://wa.me/919342853381" class="footer-social" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <a href="https://instagram.com/kiriza_handmade" class="footer-social" target="_blank"><i class="fab fa-instagram"></i></a>
+  </div>
+  <p class="footer-copy">Copyright &copy; 2026 <span>Kiriza Handmade Things</span>. All rights reserved. Made with ❤️</p>
+</footer>
+
+<!-- ── AI CHAT ── -->
+<div class="ai-chat-window" id="chatWindow">
+  <div class="chat-header">
+    <div class="chat-avatar">🌸</div>
+    <div class="chat-header-info">
+      <strong>Kiriza AI Assistant</strong>
+      <span>● Online — Here to help!</span>
+    </div>
+    <button class="chat-close" onclick="toggleChat()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-quick-btns" id="quickBtns">
+    <button class="chat-quick-btn" onclick="quickMsg('Products')">🛍️ Products</button>
+    <button class="chat-quick-btn" onclick="quickMsg('Pricing')">💰 Pricing</button>
+    <button class="chat-quick-btn" onclick="quickMsg('Custom Order')">✨ Custom</button>
+    <button class="chat-quick-btn" onclick="quickMsg('Contact')">📞 Contact</button>
+  </div>
+  <div class="chat-input-row">
+    <input class="chat-input" id="chatInput" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendChat()">
+    <button class="chat-send" onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
+  </div>
+</div>
+
+<button class="ai-chat-fab" onclick="toggleChat()">
+  🌸
+  <span class="fab-badge">AI</span>
+</button>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── PRODUCTS DATA ──
+const products = [
+  { name:"Customized Kerchiefs", category:"Textile Art", price:"₹120–₹250", stock:18, img:"https://images.unsplash.com/photo-1594938298603-c8148c4b4c4f?w=400&h=400&fit=crop" },
+  { name:"Handmade Bracelets", category:"Accessories", price:"₹80–₹350", stock:24, img:"https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=400&h=400&fit=crop" },
+  { name:"Designer Purses", category:"Bags & Pouches", price:"₹350–₹900", stock:9, img:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=400&fit=crop" },
+  { name:"Hair Accessories", category:"Hair Crafts", price:"₹60–₹200", stock:0, img:"https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=400&fit=crop" },
+  { name:"Girls Baby Frocks", category:"Baby Wear", price:"₹250–₹700", stock:14, img:"https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop" },
+  { name:"Girls Dresses", category:"Fashion", price:"₹450–₹1200", stock:7, img:"https://images.unsplash.com/photo-1537832816519-689ad163238b?w=400&h=400&fit=crop" },
+  { name:"Customized Gift Items", category:"Gifts", price:"₹150–₹800", stock:32, img:"https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=400&fit=crop" },
+];
+
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = products.map((p, i) => `
+    <div class="product-card reveal" style="transition-delay:${i * 0.08}s">
+      <div class="product-img-wrap">
+        <img src="${p.img}" alt="${p.name}" loading="lazy">
+        <span class="stock-badge ${p.stock > 0 ? 'available' : 'out'}">
+          ${p.stock > 0 ? `✓ In Stock` : `✗ Stock Out`}
+        </span>
+      </div>
+      <div class="product-info">
+        <p class="product-category">${p.category}</p>
+        <h3 class="product-name">${p.name}</h3>
+        <div class="product-price-row">
+          <span class="product-price">${p.price}</span>
+          <span class="product-stock">Stock: <span>${p.stock > 0 ? p.stock + ' left' : '—'}</span></span>
+        </div>
+        <button class="btn-order ${p.stock === 0 ? 'disabled' : ''}"
+          onclick="${p.stock > 0 ? `orderProduct('${p.name}')` : ''}">
+          ${p.stock > 0 ? '🛒 Order Now' : '❌ Stock Out'}
+        </button>
+      </div>
+    </div>
+  `).join('');
+  observeReveal();
+}
+renderProducts();
+
+function orderProduct(name) {
+  const msg = encodeURIComponent(`Hi Kiriza! I'd like to order: ${name}. Please share availability and price. 😊`);
+  window.open(`https://wa.me/919342853381?text=${msg}`, '_blank');
+}
+
+// ── NAVBAR ──
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  updateActiveNav();
+});
+function updateActiveNav() {
+  const secs = ['home','products','offers','about','contact'];
+  let active = 'home';
+  secs.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 120) active = id;
+  });
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + active);
+  });
+}
+
+// ── HAMBURGER ──
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('mobileMenu').classList.toggle('open');
+});
+document.querySelectorAll('.mobile-menu a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open'));
+});
+
+// ── SCROLL REVEAL ──
+function observeReveal() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold:.12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+}
+observeReveal();
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── CONTACT FORM ──
+function submitForm() {
+  const name = document.getElementById('formName').value.trim();
+  const phone = document.getElementById('formPhone').value.trim();
+  const msg = document.getElementById('formMsg').value.trim();
+  if (!name || !phone || !msg) { showToast('Please fill all fields ✨'); return; }
+  const wa = encodeURIComponent(`Name: ${name}\nPhone: ${phone}\nMessage: ${msg}`);
+  window.open(`https://wa.me/919342853381?text=${wa}`, '_blank');
+  document.getElementById('formName').value = '';
+  document.getElementById('formPhone').value = '';
+  document.getElementById('formMsg').value = '';
+  showToast('Message sent! We\'ll reply soon 🌸');
+}
+
+// ── AI CHAT ──
+const responses = {
+  'products': "We offer Kerchiefs, Bracelets, Purses, Hair Accessories, Baby Frocks, Girls Dresses, and Customized Gift Items! 🌸 Scroll up to see all with prices.",
+  'pricing': "Our prices range from ₹60 for hair accessories up to ₹1200 for premium dresses. All products are custom-made and priced fairly for quality! 💕",
+  'custom order': "Yes! We love custom orders ✨ Share your design idea or reference image via WhatsApp at +91 93428 53381 and we'll make it just for you!",
+  'contact': "📞 WhatsApp: +91 93428 53381\n📸 Instagram: @kiriza_handmade\nWe reply quickly! 🌸",
+  'delivery': "We deliver pan-India via courier 📦 Delivery time is 5–7 working days for most locations.",
+  'hello': "Hello! 🌸 Welcome to Kiriza Handmade Things! How can I help you today?",
+  'hi': "Hi there! 💕 I'm Kiriza's AI assistant. Ask me about products, pricing, or custom orders!",
+};
+
+function getResponse(msg) {
+  const lower = msg.toLowerCase();
+  for (const [key, val] of Object.entries(responses)) {
+    if (lower.includes(key)) return val;
+  }
+  return "I'd love to help! 🌸 For specific questions, please WhatsApp us at +91 93428 53381 or DM on Instagram @kiriza_handmade. We reply super fast!";
+}
+
+function addMsg(text, type) {
+  const box = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = `chat-msg ${type}`;
+  div.textContent = text;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+function sendChat() {
+  const inp = document.getElementById('chatInput');
+  const val = inp.value.trim();
+  if (!val) return;
+  addMsg(val, 'user');
+  inp.value = '';
+  document.getElementById('quickBtns').style.display = 'none';
+  setTimeout(() => addMsg(getResponse(val), 'bot'), 600);
+}
+
+function quickMsg(q) {
+  addMsg(q, 'user');
+  document.getElementById('quickBtns').style.display = 'none';
+  setTimeout(() => addMsg(getResponse(q), 'bot'), 600);
+}
+
+let chatOpen = false;
+function toggleChat() {
+  chatOpen = !chatOpen;
+  const win = document.getElementById('chatWindow');
+  win.classList.toggle('open', chatOpen);
+  if (chatOpen && document.getElementById('chatMessages').children.length === 0) {
+    setTimeout(() => addMsg("Hello! 🌸 Welcome to Kiriza Handmade Things! I'm here to help with products, orders, and pricing. What can I do for you?", 'bot'), 300);
+  }
+}
+
+// ── SMOOTH SCROLL for anchors ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) { e.preventDefault(); el.scrollIntoView({ behavior:'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>
